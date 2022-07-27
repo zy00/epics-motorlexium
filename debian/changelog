@@ -1,0 +1,6 @@
+epics-motorlexium (1.0+deb10u1) buster; urgency=medium
+
+  * Initial release with new package name
+
+ -- Zhijian Yin <zyin@bnl.gov>  Wed, 25 Mar 2020 21:34:56 -0400
+

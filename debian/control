@@ -1,0 +1,31 @@
+Source: epics-motorlexium
+Section: libdevel
+Priority: optional
+Maintainer: Zhijian Yin <zyin@bnl.gov>
+Build-Depends: debhelper (>= 9), epics-debhelper (>= 8.14~),
+	       epics-dev, 
+           epics-asyn-dev, 
+           epics-motorcore-dev
+Standards-Version: 3.9.8
+Homepage: <insert the upstream URL, if relevant>
+#Vcs-Git: https://anonscm.debian.org/collab-maint/epics-lexiummotor.git
+#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/epics-lexiummotor.git
+
+Package: epics-motorlexium-dev
+Architecture: any
+Depends: libmotorlexium (= ${binary:Version}), 
+	${shlibs:Depends}, ${misc:Depends}
+Description: Sneider Lexium Motor driver model 3
+  .
+   This package contains headers and libraries needed at build time.
+
+Package: libmotorlexium
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+Conflicts: epics-synapps,
+Description: Sneider Lexium Motor driver model 3
+  .
+  This package contains runtime libraries
+
+
+

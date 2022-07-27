@@ -1,0 +1,22 @@
+syntax: glob
+bin/*
+db/*
+dbd/*
+#*.o
+O.*
+as/*
+.cproject
+.project
+*~
+envPaths
+*.swp
+
+syntax: regexp
+^pmc/.*
+
+records.dbl
+syntax: glob
+*~
+.hgignore
+.hg/
+records.dbl
