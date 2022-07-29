@@ -1,2 +1,2 @@
-MOTORLEXIUM=../..
+LEXIUM=$(TOP)/..
 EPICS_BASE=/usr/lib/epics
