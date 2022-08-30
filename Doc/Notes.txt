@@ -62,3 +62,37 @@ Running Current:  RC=25 (default, 25%), change:  RC=50  PR RC   S
 Holding Current:  HC=5 (default 5%), to change: HC=10 PR HC S
 
 Print temperature:  PR IT
+
+
+============
+
+IS command: 
+set input function:
+
+ IS = <input#>, <type>, <active>
+
+ Type:
+
+0 GP        Typical usage: to trigger events within a program
+1 Home      When active triggers the homing routine as defined by the homing variable (HM)
+2 Limit plus (+)    Functions as specified by the limit variable (LM).
+3 Limit minus (—)   Functions as specified by the limit variable (LM).
+4 G0        Executes a program at address 1 upon activation.
+5 Soft stop Stops motion with deceleration and halts program
+6 Pause     Pause/resume program with motion.
+
+When given "PR IS" command, typical reply
+IS = 1, 0, 1
+IS = 2, 2, 0
+IS = 3, 3, 0
+IS = 4, 0, 1
+IS = 6, 0, 1
+
+P2a input plug has 7 pins:
+1a: input reference
+2a: IN1 (42 size not connected)
+3a: IN2
+4a: IN3
+5a: IN4
+6a: Analog In  - not avail on Absolute model
+7a: Logic Gnd  - not avail on absolute model
