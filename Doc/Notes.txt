@@ -1,0 +1,64 @@
+* configure IP address
+    default is 192.168.33.1
+    need to set up laptop to have that subnet to change
+
+* set echo mode to 2  # see Mcode manual 5-41
+                      # otherwise all commands would not respond - readback 0 all the time
+    EM=2                  
+    PR EM       
+
+* Limit connection
+
+input2 = Limit +
+input3 = limit -
+
+connections: P2a
+pin 1a = input ref (connect to v+)
+pin 3a = in2       (LIMIT PLUS)
+pin 4a = in3       (LIMIT MINUS)
+Limit common to v-
+[Reason of not using IN1 is that NEMA17 (LMDxE42.IP20.pdf, pg49, 6.3.3) has Pin2a N/C]
+
+Limit is hardwired in file ImsMDrivePlusMotorController.cpp
+ readHomeAndLimitConfig()
+		homeSwitchInput = 4;
+    	posLimitSwitchInput = 2;
+    	negLimitSwitchInput = 3;
+
+
+need to set up as ascii commands:
+IS = 2, 2, 1
+IS = 3, 3, 1 
+(this is activate Limit when open).
+IS command syntax: 
+    IS input IOfunction InputActiveResponse
+       input = 1,2,3,4 etc
+       IOfunction: 0/generalpurpose; 1/Homing; 2/Limit+; 3/Limit-; see manual MCode_LMM.pdf 5-66 5.1.64 IS <1-4>
+
+driver has been modified to use input1=limit+; input2=limit-
+
+
+
+* For encoder feedback ops
+to close loop inside the controller, using hMT technology, set
+
+AS=1;
+MRES is the openloop resolution; 51200cts/rev  (256*20)
+Note that Encoder is 1000 lines /rev => 4000 cts/rev
+But MRES is still using openloop resolution 51200 cts/rev
+
+Or can use AS=2 (variable current)
+DO NOT use AS=3, otherwise motor keeps running
+
+
+* Save to flash with command "S"
+
+* If disconnect motor/controller power, it takes about 20s to re-establish the connection - controller reboot. Asyn autoconnect works.  For "absolute encoder models - with capacitor to save position, it will recover to the old position; For non-absolute models, readback position is zero - in this case, it would be good to set autoconnect to no, and restart IOC manually.
+
+
+# Running the Holding current
+
+Running Current:  RC=25 (default, 25%), change:  RC=50  PR RC   S
+Holding Current:  HC=5 (default 5%), to change: HC=10 PR HC S
+
+Print temperature:  PR IT
