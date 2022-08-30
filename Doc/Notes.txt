@@ -7,7 +7,7 @@
     EM=2                  
     PR EM       
 
-* Limit connection
+* Limit connection, at NSLS-II, we use:
 
 input2 = Limit +
 input3 = limit -
@@ -19,13 +19,6 @@ pin 4a = in3       (LIMIT MINUS)
 Limit common to v-
 [Reason of not using IN1 is that NEMA17 (LMDxE42.IP20.pdf, pg49, 6.3.3) has Pin2a N/C]
 
-Limit is hardwired in file ImsMDrivePlusMotorController.cpp
- readHomeAndLimitConfig()
-		homeSwitchInput = 4;
-    	posLimitSwitchInput = 2;
-    	negLimitSwitchInput = 3;
-
-
 need to set up as ascii commands:
 IS = 2, 2, 1
 IS = 3, 3, 1 
@@ -35,7 +28,7 @@ IS command syntax:
        input = 1,2,3,4 etc
        IOfunction: 0/generalpurpose; 1/Homing; 2/Limit+; 3/Limit-; see manual MCode_LMM.pdf 5-66 5.1.64 IS <1-4>
 
-driver has been modified to use input1=limit+; input2=limit-
+driver will read "PR IS" response to determine which inputs are the limits
 
 
 
