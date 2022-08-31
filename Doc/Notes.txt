@@ -1,16 +1,21 @@
-* configure IP address
-    default is 192.168.33.1
-    need to set up laptop to have that subnet to change
+## configure IP address
+    default mdrive ip is 192.168.33.1. Note there is no way to reset IP, once changed, label the motor with ip addr.
+* Install mdrive interface software LMD software suite (windows) downloaded from URL https://novantaims.com/dloads/user-interface-software/
+* Launch windows software. chose adapter interface 192.168.33.x as configured, connect to 192.168.33.1 port 503, connect 
+* Newones come with CSE mark, asking to set passwd. - set up your password, and save it somewhere.  
+* Disable Security  (Edit->Cyber Security Disable). It disconnects to motor, "connect" again
+* Click on Mac Address "Read"/ReadAll, you should see mac and ip address existed in the controller.
+* now change to new ip address/subnet mask/gateway, click on "write" on each item
+* Reset driver. Connect to new IP, and double-check new ip/mask/gateway settings
 
+## Configure Communication settings:
 * set echo mode to 2  # see Mcode manual 5-41
                       # otherwise all commands would not respond - readback 0 all the time
     EM=2                  
     PR EM       
 
-* Limit connection, at NSLS-II, we use:
-
-input2 = Limit +
-input3 = limit -
+## Configure Limits connection
+* hardware set up: at NSLS-II, we use: input2 = Limit+,  input3 = limit-
 
 connections: P2a
 pin 1a = input ref (connect to v+)
@@ -19,7 +24,7 @@ pin 4a = in3       (LIMIT MINUS)
 Limit common to v-
 [Reason of not using IN1 is that NEMA17 (LMDxE42.IP20.pdf, pg49, 6.3.3) has Pin2a N/C]
 
-need to set up as ascii commands:
+* in windows program, set up limit inputs using ascii commands:
 IS = 2, 2, 1
 IS = 3, 3, 1 
 (this is activate Limit when open).
@@ -30,9 +35,7 @@ IS command syntax:
 
 driver will read "PR IS" response to determine which inputs are the limits
 
-
-
-* For encoder feedback ops
+## For encoder feedback ops (LMDAE models)
 to close loop inside the controller, using hMT technology, set
 
 AS=1;
@@ -44,12 +47,12 @@ Or can use AS=2 (variable current)
 DO NOT use AS=3, otherwise motor keeps running
 
 
-* Save to flash with command "S"
+## Save to flash with command "S"
 
-* If disconnect motor/controller power, it takes about 20s to re-establish the connection - controller reboot. Asyn autoconnect works.  For "absolute encoder models - with capacitor to save position, it will recover to the old position; For non-absolute models, readback position is zero - in this case, it would be good to set autoconnect to no, and restart IOC manually.
+## once ioc starts,  If disconnect motor/controller power, it takes about 20s to re-establish the connection - controller reboot. Asyn autoconnect works.  For "absolute encoder models - with capacitor to save position, it will recover to the old position; For non-absolute models, readback position is zero - in this case, it would be good to set autoconnect to no, and restart IOC manually.
 
 
-# Running the Holding current
+## Running and  Holding current
 
 Running Current:  RC=25 (default, 25%), change:  RC=50  PR RC   S
 Holding Current:  HC=5 (default 5%), to change: HC=10 PR HC S
