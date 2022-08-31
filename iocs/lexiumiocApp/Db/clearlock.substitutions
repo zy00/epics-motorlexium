@@ -1,0 +1,14 @@
+file "db/clearlock.db"
+{
+pattern
+{Sys,                   Dev,        PORT  }
+{"XF:12ID1-ES", "{XtalDfl-Ax:Phi}",   P1  }
+{"XF:12ID1-ES", "{XtalDfl-Ax:PhiX}",  P2  }
+{"XF:12ID1-ES", "{XtalDfl-Ax:IH}",    P3  }
+{"XF:12ID1-ES", "{XtalDfl-Ax:IR}",     P4  }
+{"XF:12ID1-ES", "{Smpl-Ax:OH}",     P5  }
+{"XF:12ID1-ES", "{Smpl-Ax:OR}",     P6  }
+{"XF:12ID1-ES", "{Smpl-Ax:TiltX}",     P7  }
+{"XF:12ID1-ES", "{Smpl-Ax:TiltY}",     P8  }
+}
+

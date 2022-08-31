@@ -1,0 +1,10 @@
+file "db/asynComm.db"
+{
+pattern
+{P,                      PORT,   ADDRESS  }
+{"XF:12ID1-CT{Slt1:T}",   P1,    0  }
+{"XF:12ID1-CT{Slt1:B}",   P2,    0  }
+{"XF:12ID1-CT{Slt1:I}",   P3,    0  }
+{"XF:12ID1-CT{Slt1:O}",   P4,    0  }
+}
+

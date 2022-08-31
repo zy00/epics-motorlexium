@@ -1,0 +1,16 @@
+record(bi, "$(Sys)$(Dev)LockRotor-I") {
+  field(DESC, "Rotor Locked")
+  field(DTYP, "stream")
+  field(INP,"@lexium.proto getLockRotor() $(PORT)")
+  field(ZNAM, "Clear")
+  field(ONAM, "Locked")
+  field(SCAN, "1 second")
+}
+
+record(bo, "$(Sys)$(Dev)ClearLockRotor"){
+  field(DESC, "Clear Locked Rotor")
+  field(DTYP, "stream")
+  field(OUT,"@lexium.proto clearLockRotor() $(PORT) ")
+  field(ZNAM, "Stuck")
+  field(ONAM, "Clear")
+}

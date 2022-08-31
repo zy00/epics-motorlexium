@@ -1,0 +1,17 @@
+# stream protocol file for Lexium MDrive
+# Ethernet interface
+# author: Zhijian Yin zyin@bnl.gov
+
+ExtraInput = Ignore;
+ReadTimeout = 500;
+InTerminator = CR LF;
+OutTerminator = CR LF;
+
+getLockRotor {
+   out "PR LR";
+   in "%d"
+}
+
+clearLockRotor {
+   out "CF";
+}

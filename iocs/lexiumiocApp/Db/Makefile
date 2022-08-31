@@ -6,7 +6,14 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------------------
 # Create and install (or just install) into <top>/db
 # databases, templates, substitutions like this
-#DB += xxx.db
+DB += motor.substitutions
+DB += asynComm.db
+DB += asynComm.substitutions
+
+DB += motor.db
+DB += clearlock.db
+DB += clearlock.substitutions
+
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

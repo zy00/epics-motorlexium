@@ -1,0 +1,10 @@
+file "db/motor.db"
+{
+pattern
+{P,                   M,        MOTOR,     DTYP,   PORT,   DESC,        ADDR, EGU,   DIR, VELO, VBAS,  VMAX, DHLM, DLLM,  MRES,       PREC, ALIAS, INIT}
+{"XF:12ID1-OP", "{SL1-Ax:T}Mtr", "M1", "asynMotor", P0, "JJSlit Top",  0,   Rev,    Pos,  5,    0.2,   2, 15,  -15,  8e-6, 5,   "12id1:jjs_t", ""}
+{"XF:12ID1-OP", "{SL1-Ax:B}Mtr", "M2", "asynMotor", P0, "JJSlit Bottom",  0,   Rev,    Pos,  5,    0.2,   2, 15,  -15,  8e-6, 5,   "12id1:jjs_b", ""}
+{"XF:12ID1-OP", "{SL1-Ax:I}Mtr", "M3", "asynMotor", P0, "JJSlit Inb",  0,   Rev,    Pos,  5,    0.2,   2, 15,  -15,  8e-6, 5,   "12id1:jjs_i", ""}
+{"XF:12ID1-OP", "{SL1-Ax:O}Mtr", "M4", "asynMotor", P0, "JJSlit Outb",  0,   Rev,    Pos,  5,    0.2,   2, 15,  -15,  8e-6, 5,   "12id1:jjs_o", ""}
+}
+
