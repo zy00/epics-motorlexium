@@ -39,7 +39,7 @@ driver will read "PR IS" response to determine which inputs are the limits
 to close loop inside the controller, using hMT technology, set
 
 AS=1;
-MRES is the openloop resolution; 51200cts/rev  (256*20)
+MRES is the openloop resolution; 51200cts/rev  (256*200, 256 is the microstepping factor)
 Note that Encoder is 1000 lines /rev => 4000 cts/rev
 But MRES is still using openloop resolution 51200 cts/rev
 
