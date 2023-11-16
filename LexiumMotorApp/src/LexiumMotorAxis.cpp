@@ -71,12 +71,12 @@ asynStatus LexiumMotorAxis::configAxis()
 	sprintf(cmd, "PR VR");
 	for (int i=0; i<maxRetries; i++) {
 		status = pController->writeReadController(cmd, resp, sizeof(resp), &nread, Lexium_TIMEOUT);
-		asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:%s: Version retry.\n", DRIVER_NAME, functionName);
+		asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:%s: Version retry.\n", pController->motorName, functionName);
 		if (status == asynError) {
-			asynPrint(pController->pasynUserSelf, ASYN_TRACE_ERROR, "%s:%s: Version inquiry FAILED.\n", DRIVER_NAME, functionName);
+			asynPrint(pController->pasynUserSelf, ASYN_TRACE_ERROR, "%s:%s: Version inquiry FAILED.\n", pController->motorName, functionName);
 		} else { // ok to check firmware level/format or just strlen? v3.009
 			if (strlen(resp) < 2) {
-				asynPrint(pController->pasynUserSelf, ASYN_TRACE_ERROR, "%s:%s: Version inquiry FAILED version=%s.\n", DRIVER_NAME, functionName, resp);
+				asynPrint(pController->pasynUserSelf, ASYN_TRACE_ERROR, "%s:%s: Version inquiry FAILED version=%s.\n", pController->motorName, functionName, resp);
 				setIntegerParam(pController->motorStatusProblem_, 1);
 				setIntegerParam(pController->motorStatusCommsError_, 1);
 				status = asynError; return(status);
@@ -92,7 +92,7 @@ asynStatus LexiumMotorAxis::configAxis()
 		int val = atoi(resp);
 		setIntegerParam(pController->motorStatusHasEncoder_, val ? 1:0);
 		setIntegerParam(pController->motorStatusGainSupport_, val ? 1:0);
-		asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:%s: set motorStatusHasEncoder_=%d, motorStatusGainSupport_=%d.\n", DRIVER_NAME, functionName, val, val);
+		asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:%s: set motorStatusHasEncoder_=%d, motorStatusGainSupport_=%d.\n", pController->motorName, functionName, val, val);
 	}
 
 	// start idle timer
@@ -148,7 +148,7 @@ asynStatus LexiumMotorAxis::setAxisMoveParameters(double minVelocity, double max
 	bail:
 	if (status) {
 		char buff[LOCAL_LINE_LEN];
-		sprintf(buff, "%s:%s: ERROR setting motor velocity and acceleration", DRIVER_NAME, functionName);
+		sprintf(buff, "%s:%s: ERROR setting motor velocity and acceleration", pController->motorName, functionName);
 		handleAxisError(buff);
 	}
 
@@ -178,7 +178,7 @@ asynStatus LexiumMotorAxis::move(double position, int relative, double minVeloci
 	if (status) goto bail;
 
 	// move
-	asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:%s: VBASE=%f, VELO=%f, ACCL=%f, position=%f, relative=%d\n", DRIVER_NAME, functionName, minVelocity, maxVelocity, acceleration, position, relative);
+	asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:%s: VBASE=%f, VELO=%f, ACCL=%f, position=%f, relative=%d\n", pController->motorName, functionName, minVelocity, maxVelocity, acceleration, position, relative);
 	if (relative) { // relative move MR
 		sprintf(cmd, "MR %ld", (long)position);
 	} else { // absolute move MA
@@ -190,7 +190,7 @@ asynStatus LexiumMotorAxis::move(double position, int relative, double minVeloci
 	bail:
 	if (status) {
 		char buff[LOCAL_LINE_LEN];
-		sprintf(buff, "%s:%s: ERROR moving motor", DRIVER_NAME, functionName);
+		sprintf(buff, "%s:%s: ERROR moving motor", pController->motorName, functionName);
 		handleAxisError(buff);
 	}
 
@@ -219,7 +219,7 @@ asynStatus LexiumMotorAxis::moveVelocity(double minVelocity, double maxVelocity,
 	if (status) goto bail;
 
 	// move
-	asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:%s: VBASE=%f, VELO=%f, ACCL=%f\n", DRIVER_NAME, functionName, minVelocity, maxVelocity, acceleration);
+	asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:%s: VBASE=%f, VELO=%f, ACCL=%f\n", pController->motorName, functionName, minVelocity, maxVelocity, acceleration);
 	sprintf(cmd, "SL %ld", (long)maxVelocity);
 	status = pController->writeController(cmd, Lexium_TIMEOUT);
 	if (status) goto bail;
@@ -227,7 +227,7 @@ asynStatus LexiumMotorAxis::moveVelocity(double minVelocity, double maxVelocity,
 	bail:
 	if (status) {
 		char buff[LOCAL_LINE_LEN];
-		sprintf(buff, "%s:%s: ERROR jogging motor", DRIVER_NAME, functionName);
+		sprintf(buff, "%s:%s: ERROR jogging motor", pController->motorName, functionName);
 		handleAxisError(buff);
 	}
 
@@ -263,7 +263,7 @@ asynStatus LexiumMotorAxis::stop(double acceleration)
 	bail:
 	if (status) {
 		char buff[LOCAL_LINE_LEN];
-		sprintf(buff, "%s:%s: ERROR stopping motor", DRIVER_NAME, functionName);
+		sprintf(buff, "%s:%s: ERROR stopping motor", pController->motorName, functionName);
 		handleAxisError(buff);
 	}
 
@@ -298,7 +298,7 @@ asynStatus LexiumMotorAxis::home(double minVelocity, double maxVelocity, double 
 	// for MDrivePlus initial velocity must be below max_velocity
 	if (minVelocity > 0) { // base velocity being configured
 		if (minVelocity > maxVelocity ) { // illegal state
-			asynPrint(pController->pasynUserSelf, ASYN_TRACE_ERROR, "%s:%s: base velocity=%f cannot be greater than max velocity=%f\n", DRIVER_NAME, functionName, minVelocity, maxVelocity);
+			asynPrint(pController->pasynUserSelf, ASYN_TRACE_ERROR, "%s:%s: base velocity=%f cannot be greater than max velocity=%f\n", pController->motorName, functionName, minVelocity, maxVelocity);
 			goto bail;
 		}
 	} else { // base velocity needs to be set because creeping back to home switch at base velocity, so make sure it's nonzero
@@ -318,7 +318,7 @@ asynStatus LexiumMotorAxis::home(double minVelocity, double maxVelocity, double 
 	if (forwards == 1) { // homing in forward direction
 		direction = 3;
 	}
-	asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:%s: VBASE=%f, VELO=%f, ACCL=%f, forwards=%d\n", DRIVER_NAME, functionName, minVelocity, maxVelocity, acceleration, forwards);
+	asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:%s: VBASE=%f, VELO=%f, ACCL=%f, forwards=%d\n", pController->motorName, functionName, minVelocity, maxVelocity, acceleration, forwards);
 	sprintf(cmd, "HM %d", direction);
 	status  = pController->writeController(cmd, Lexium_TIMEOUT);
 	if (status) goto bail;
@@ -326,7 +326,7 @@ asynStatus LexiumMotorAxis::home(double minVelocity, double maxVelocity, double 
 	bail:
 	if (status) {
 		char buff[LOCAL_LINE_LEN];
-		sprintf(buff, "%s:%s: ERROR homing motor", DRIVER_NAME, functionName);
+		sprintf(buff, "%s:%s: ERROR homing motor", pController->motorName, functionName);
 		handleAxisError(buff);
 	}
 
@@ -348,7 +348,7 @@ asynStatus LexiumMotorAxis::setPosition(double position)
 	static const char *functionName = "setPosition()";
 
 	// set position
-	asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:%s: position=%f\n", DRIVER_NAME, functionName, position);
+	asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:%s: position=%f\n", pController->motorName, functionName, position);
 	  sprintf(cmd, "P=%ld", (long)position);
 	status = pController->writeController(cmd, Lexium_TIMEOUT);
      // ZY add cmd to set C1 and C2 to the position for internal encoders 
@@ -362,7 +362,7 @@ asynStatus LexiumMotorAxis::setPosition(double position)
 	bail:
 	if (status) {
 		char buff[LOCAL_LINE_LEN];
-		sprintf(buff, "%s:%s: ERROR setting motor position", DRIVER_NAME, functionName);
+		sprintf(buff, "%s:%s: ERROR setting motor position", pController->motorName, functionName);
 		handleAxisError(buff);
 	}
 
@@ -426,10 +426,10 @@ asynStatus LexiumMotorAxis::poll(bool *moving)
 	if (prevPosition != position && *moving == false && idleTime > 30) {
 		sprintf(cmd, "S");
 		if (status = pController->writeController(cmd, Lexium_TIMEOUT)) {
-			asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:poll(): ERROR saving position to NVM\n", DRIVER_NAME);
+			asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:poll(): ERROR saving position to NVM\n", pController->motorName);
 			goto bail;
 		}
-		asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:poll(): saving parameters to NVM\n", DRIVER_NAME);
+		asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:poll(): saving parameters to NVM\n", pController->motorName);
 		idleTimeStart = epicsTime::getCurrent();
 		prevPosition = position;
 	}
@@ -466,7 +466,7 @@ asynStatus LexiumMotorAxis::poll(bool *moving)
 	bail:
 	if (status) {
 		char buff[LOCAL_LINE_LEN];
-		sprintf(buff, "%s:%s: ERROR polling motor", DRIVER_NAME, functionName);
+		sprintf(buff, "%s:%s: ERROR polling motor", pController->motorName, functionName);
 		handleAxisError(buff);
 	}
 
@@ -481,7 +481,7 @@ asynStatus LexiumMotorAxis::poll(bool *moving)
 
 	int mstat;
 	pController->getIntegerParam(pController->motorStatus_, &mstat);
-	asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:%s: POS=%f, MSTAT=%d\n", DRIVER_NAME, functionName, position, mstat);
+	asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:%s: POS=%f, MSTAT=%d\n", pController->motorName, functionName, position, mstat);
 
 	return status;
 
@@ -502,12 +502,12 @@ asynStatus LexiumMotorAxis::saveToNVM()
 	sprintf(cmd, "S");
 	status = pController->writeController(cmd, Lexium_TIMEOUT);
 	if (status) goto bail;
-	asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:%s: Saved to NVM\n", DRIVER_NAME, functionName);
+	asynPrint(pController->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s:%s: Saved to NVM\n", pController->motorName, functionName);
 
 	bail:
 	if (status) {
 		char buff[LOCAL_LINE_LEN];
-		sprintf(buff, "%s:%s: ERROR saving to NVM", DRIVER_NAME, functionName);
+		sprintf(buff, "%s:%s: ERROR saving to NVM", pController->motorName, functionName);
 		handleAxisError(buff);
 	}
 
@@ -613,6 +613,6 @@ void LexiumMotorAxis::handleAxisError(char *errMsg)
 	case 111: strcpy(errCodeString, "Factory calibration failed"); break;
 	}
   if(errCode !=0){
-	asynPrint(pController->pasynUserSelf, ASYN_TRACE_ERROR, "%s:%s: %s, %d:'%s'\n", DRIVER_NAME, functionName, errMsg, errCode, errCodeString);
+	asynPrint(pController->pasynUserSelf, ASYN_TRACE_ERROR, "%s:%s: %s, %d:'%s'\n", pController->motorName, functionName, errMsg, errCode, errCodeString);
    }
 }
