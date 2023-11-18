@@ -1,4 +1,4 @@
-#!../../bin/linux-x86_64/lexiumioc
+#!../../bin/linux-x86_64/lexium
 
 
 < envPaths
@@ -9,8 +9,8 @@ epicsEnvSet("STREAM_PROTOCOL_PATH", "$(TOP)/protocols")
 
 cd ${TOP}
 ## Register all support components
-dbLoadDatabase("dbd/lexiumioc.dbd")
-lexiumioc_registerRecordDeviceDriver(pdbbase) 
+dbLoadDatabase("dbd/lexium.dbd")
+lexium_registerRecordDeviceDriver(pdbbase) 
 
 
 ##########################################
